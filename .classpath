@@ -7,7 +7,7 @@
 	<classpathentry excluding="org/linphone/jlinphone/core/test/LinphoneCoreTester.java|org/linphone/jlinphoneMidlet.java|org/linphone/DisplayManager.java|org/linphone/jlinphone/gui/Demo.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="submodules/jliblinphone/submodules/externals/sip-for-me/src"/>
 	<classpathentry kind="src" path="res"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/net.rim.ejde.BlackBerryVMInstallType/BlackBerry JRE 5.0.0"/>
 	<classpathentry kind="src" path=".locale_interfaces"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/net.rim.ejde.BlackBerryVMInstallType/BlackBerry JRE 6.0.0"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
