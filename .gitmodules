@@ -1,0 +1,3 @@
+[submodule "submodules/jliblinphone"]
+	path = submodules/jliblinphone
+	url = git://git.linphone.org/jliblinphone.git

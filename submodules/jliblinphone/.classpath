@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="org/linphone/jortp/RtpJ2seTransport.java" kind="src" path="submodules/jortp/src"/>
+	<classpathentry kind="src" path="submodules/linphone/java/common"/>
+	<classpathentry kind="src" path="submodules/linphone/java/j2me"/>
+	<classpathentry excluding="org/linphone/jlinphone/core/test/LinphoneCoreTester.java|org/linphone/jlinphoneMidlet.java|org/linphone/DisplayManager.java|org/linphone/jlinphone/gui/Demo.java" kind="src" path="src"/>
+	<classpathentry kind="src" path="submodules/externals/sip-for-me/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/net.rim.ejde.BlackBerryVMInstallType/BlackBerry JRE 5.0.0"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

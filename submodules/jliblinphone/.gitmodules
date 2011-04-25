@@ -1,0 +1,9 @@
+[submodule "submodules/jortp"]
+	path = submodules/jortp
+	url = git://git.linphone.org/jortp.git
+[submodule "submodules/linphone"]
+	path = submodules/linphone
+	url =git://git.sv.gnu.org/linphone.git
+[submodule "submodules/externals/sip-for-me"]
+	path = submodules/externals/sip-for-me
+	url = git://git.linphone.org/sip-for-me.git

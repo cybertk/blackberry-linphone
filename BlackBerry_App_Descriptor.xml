@@ -1,0 +1,20 @@
+<Properties ModelVersion="1.1.2">
+  <General Title="Linphone" Version="1.0.0" Vendor="BlackBerry Developer" Description="Voice over IP SIP phone (AMR-NB only) "/>
+  <Application Type="BlackBerry Application" MainMIDletName="" MainArgs="" HomeScreenPosition="0" StartupTier="7" IsSystemModule="false" IsAutostartup="false"/>
+  <Resources hasTitleResource="true" TitleResourceBundleName="Linphone" TitleResourceBundleRelativePath="src/org/linphone/jlinphone/gui/Linphone.rrh" TitleResourceBundleClassName="org.linphone.jlinphone.gui.Linphone" TitleResourceBundleKey="" DescriptionId="">
+    <Icons>
+      <Icon CanonicalFileName="submodules/jliblinphone/submodules/linphone/pixmaps/linphone.png" IsFocus="false"/>
+    </Icons>
+  </Resources>
+  <Compile OutputCompilerMessages="false" ConvertImages="false" CreateWarningForNoExportedRoutine="true" CompressResources="false" AliasList="">
+    <PreprocessorDefines/>
+  </Compile>
+  <Packaging OutputFileName="jlinphone" OutputFolder="deliverables" PreBuildStep="" PostBuildStep="" CleanStep="" GenerateALXFile="true">
+    <AlxFiles/>
+  </Packaging>
+  <HiddenProperties>
+    <ClassProtection/>
+    <PackageProtection/>
+  </HiddenProperties>
+  <AlternateEntryPoints/>
+</Properties>

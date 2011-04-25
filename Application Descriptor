@@ -1,0 +1,9 @@
+MIDlet-1: jlinphoneMidlet,,org.linphone.jlinphoneMidlet
+MIDlet-2: LinphoneCoreTester,,org.linphone.jlinphone.core.test.LinphoneCoreTester
+MIDlet-3: Demo,,org.linphone.jlinphone.gui.Demo
+MIDlet-Jar-URL: jlinphone.jar
+MIDlet-Name: Linphone
+MIDlet-Vendor: Belledonne Communications
+MIDlet-Version: 0.01
+MicroEdition-Configuration: CLDC-1.1
+MicroEdition-Profile: MIDP-2.0

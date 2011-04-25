@@ -1,0 +1,256 @@
+<?xml version="1.0"?>
+
+<!-- This file was contributed by Alistair Coles from HP Labs Bristol -->
+<!-- For using ANT:
+
+Authors:
+Initial: Olivier Deruelle jeand@nist.gov
+Revisions and fixes by: Jean Deruelle jeand@nist.gov
+
+Ant is a platform independent build tool.
+Get the tool from www.apache.org and install. Set your path to the ant shell
+(batch) file.
+
+>From the command prompt, execute the following command:
+ant target
+
+Where avalaible targets for the nist-siplite stack are:	
+
+        - init -> initialization 
+
+		- clean -> cleans everything: All the built stuff.
+        
+        - compile -> compile the nist-siplite stack
+        
+        - preverify -> check compatibility with cldc and prepare the byte code
+        
+        - all -> build all
+
+-->
+<project name="sip-for-me" default="all" basedir=".">
+
+    <!-- WTK/Antenna properties-->
+	<property environment="env" /> 
+    <property name="wtk.home" value="${env.WTK_HOME}" />
+    <property name="midlet.home" value="."/>
+    <property name="wtk.cldc.version" value="1.1"/>
+	<property name="wtk.midp.version" value="2.0"/>
+
+    <!-- Classpath properties-->
+    <property name="resources" value="./resources" />
+    <property name="midp_lib" value="${wtk.home}/lib/midpapi20.jar" />     
+    <property name="cldc_lib" value="${wtk.home}/lib/cldcapi11.jar" />     
+	<property name="bootclasspath" value="${midp_lib};${cldc_lib}" />
+		
+	<!-- Project properties-->
+    <property file="build.properties" />
+	<property name="res" value="./res"/>
+    <property name="src" value="./src" />	
+    <property name="lib" value="./lib" />
+    <property name="target.dir" value="./target" />  
+	
+	<property name="midlet.name" value="sip-for-me"/>
+	<property name="midlet.version" value="2.1.0"/>
+	<property name="midlet.vendor" value="Genaker"/>
+	<property name="jad.name" value="${midlet.name}-${midlet.version}.jad"/>
+	<property name="jar.name" value="${midlet.name}-${midlet.version}.jar"/>
+		
+	<!-- Build properties -->
+    <property name="debug" value="true" />
+    <property name="deprecation" value="true" />
+    <property name="optimize" value="false" />
+	
+    <!-- javadoc properties-->
+    <property name="docdir" value="./docs/api" />
+    <property name="href.nist.homepage" value="http://www-x.antd.nist.gov/" />
+    <property name="href.uncopyright" value="../uncopyright.html" />
+    <property name="href.mailto" value="mailto:nist-sip-dev@antd.nist.gov" />
+    <property name="href.distribution" value="http://www-x.antd.nist.gov/proj/iptel/nist-sip-requestform/nist-sip-2.1-requestform.htm"/>      
+    <!-- properties set --> 
+    
+	<!-- Work with the actual code
+	-->
+	<taskdef classpath="../../classes;../../lib/antlr.jar" resource="antenna.properties"/>
+	
+	<path id="boot.classpath">
+		<fileset dir="${wtk.home}/lib">
+			<include name="cldcapi11.jar"/>
+			<include name="midpapi20.jar"/>
+		</fileset>
+	</path>
+	
+	
+    <!-- Initialization -->
+    <target name="init" depends="clean">
+        <echo message="midp library set to ${midp_lib}"/>
+        <echo message="cldc library set to ${cldc_lib}"/>
+    </target>
+    
+    <!-- Clean everything -->
+    <target name="clean">
+		<delete failonerror="false" dir="${target.dir}" />
+    </target>
+    
+    <!-- Compile stack and create a JAR -->
+    <target name="compile" depends="init">                	
+    	
+		<wtkpreprocess srcdir="${src}" destdir="${target.dir}/src_preprocessed" symbols="" verbose="false" />		
+
+		<wtkbuild bootclasspath="${bootclasspath}" srcdir="${target.dir}/src_preprocessed" destdir="${target.dir}/classes" preverify="true" />
+    	
+		<wtkjad jadfile="${target.dir}/${jad.name}" vendor="${midlet.vendor}" version="${midlet.version}">
+			<attribute name="MIDlet-Permissions" value="javax.microedition.io.Connector.socket, javax.microedition.io.Connector.serversocket, javax.microedition.io.Connector.datagramreceiver, javax.microedition.io.Connector.datagram"/>
+			<attribute name="MicroEdition-Configuration" value="CLDC-1.1"/>
+			<attribute name="MicroEdition-Profile" value="MIDP-2.0"/>
+		</wtkjad>
+	
+	<wtkpackage jarfile="${target.dir}/${jar.name}" 
+				jadfile="${target.dir}/${jad.name}"
+				preverify="true" 
+				obfuscate="false" 
+				bootclasspath="${bootclasspath}" 
+				verbose="true">
+		<fileset dir="${target.dir}/classes"/>
+	</wtkpackage>
+    	
+    </target>
+        
+
+    <!-- Build everything for J2ME -->
+    <target name="all" depends="compile"/>
+    
+    <target name="javadoc" >
+        <javadoc packagenames="sip4me.gov.nist.siplite.*,sip4me.gov.nist.siplite.address.*,gov.nist.siplite.message.*,gov.nist.siplite.header.*,gov.nist.siplite.stack.*,gov.nist.siplite.parser.*"
+                        sourcepath="${src}"
+                        overview="${docdir}/overview.html"
+                        destdir="${docdir}"
+                        use="true"
+                        splitindex="true"
+                        windowtitle="NIST-SIPLITE v2.1"
+                        doctitle="NIST SIP/SDP Lite Parser and Stack (v2.1)"
+                        public="true"
+                        author="true"
+                        version="true"
+                        defaultexcludes="yes"
+                        additionalparam="-breakiterator">
+            <classpath>
+                    <pathelement location="${resources}/nist-siplite.jar"/>
+            </classpath>
+            <link href="http://java.sun.com/products/j2se/1.4.2/docs/api" />
+            <header>
+                    <![CDATA[
+                            <b> NIST SIP Parser and Stack (v2.1) </b>
+                    ]]>
+            </header>
+            <bottom>
+                    <![CDATA[
+                            <font size="-1">
+                                    <a href="${href.nist.homepage}"> A product of the NIST/ITL Advanced Networking Technologies Division. </a><br>
+                                    <a href="${href.uncopyright}"> See conditions of use. </a> <br>
+                                    <a href="${href.mailto}">Submit a bug report or feature request. </a><br>
+                            </font>
+                    ]]>
+            </bottom>
+        </javadoc>
+    </target>
+    
+    
+    <!--                      Debug Tool                                     -->
+    
+    
+    <!-- Compile the debug tool -->
+    <target name="compile_debug">                
+        <javac destDir="${build}/classes" srcdir="${src}/debug" debug="true">    
+            <classpath>
+                <pathelement location="${bcel}"/>
+            </classpath>
+        </javac>
+    </target>
+    
+    <!-- Run the debug tool -->
+    <target name="debug" depends="compile_debug">
+        <java classname="debug.FindLine" fork="true" failonerror="true">
+            <classpath>
+                <pathelement location="${bcel}"/>
+                <pathelement location="${build}/classes"/>
+            </classpath>
+          	<arg value="build/preverified/sip4me/gov/nist/microedition/sip/StackConnector.class"/>
+            <!--<arg value="build/preverified/sip4me/nist/javax/microedition/sip/SipRefreshHelper.class"/>-->
+			<!--<arg value="build/preverified/sip4me/gov/nist/siplite/stack/ServerTransaction.class"/>-->
+			<!--<arg value="build/preverified/examples/jsr180/Shootist.class"/>-->
+			<!--<arg value="build/preverified/examples/messaging/CallListener.class"/>-->
+            <arg value="processRequest"/>
+            <arg value="91"/>
+        </java>
+    </target>
+    
+    
+    <!--                      Shootme example                                -->
+    
+    
+    <!-- Compile the example -->
+    <target name="compile_examples">                
+        <javac destDir="${build}/classes" srcdir="${src}/examples" 
+               bootclasspath="${midp_lib};${cldc_lib};${resources}/nist-siplite.jar" target="1.2" source="1.3" debug="true"/>    
+    </target>
+    
+    <!-- Check compatibility with cldc and prepare the byte code -->
+    <target name="preverify_examples" depends="compile_examples">        
+        <exec executable="${wtk.home}/bin/preverify">
+            <arg line="-cldc -classpath ${midp_lib};${cldc_lib}"/>
+            <arg line="-d build/preverified build/classes"/>
+            <arg line=""/>
+        </exec>
+    </target>
+    
+    <!-- Build the shootme-lite jar -->
+    <target name="shoot_build" depends="preverify_examples">
+	    <copy file="${src}/examples/messaging/logoNist.png"
+     	       tofile="${build}/preverified/examples/messaging/logoNist.png"/>
+	    <copy file="${src}/examples/messaging/online_messenger.png"
+     	       tofile="${build}/preverified/examples/messaging/online_messenger.png"/>
+     	<copy file="${src}/examples/messaging/offline_messenger.png"
+     	       tofile="${build}/preverified/examples/messaging/offline_messenger.png"/>
+        <jar jarfile="${build}/bin/ShootLite.jar">	        
+            <zipfileset src="${resources}/nist-siplite.jar"/>
+            <fileset dir="${build}/preverified">
+                <include name="examples/**/*.class"/>         
+                <include name="examples/**/*.png"/>                 
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="DERUELLE Jean"/>
+                <attribute name="MIDlet-Name" value="ShootLite"/>
+                <attribute name="MIDlet-Version" value="2.0"/>
+                <attribute name="MIDlet-Vendor" value="NIST"/>                                 
+                <attribute name="MIDlet-Permissions" 
+                		   value="javax.microedition.io.Connector.http,javax.microedition.io.Connector.sip,javax.microedition.io.Connector.socket,javax.microedition.io.Connector.https,javax.microedition.io.Connector.datagram,javax.microedition.io.Connector.serversocket,javax.microedition.io.Connector.datagramreceiver,javax.microedition.io.Connector.comm"/>
+            </manifest>  
+        </jar>
+        <copy file="${resources}/jads/ShootLite.jad"
+            tofile="${build}/bin/ShootLite.jad"/>
+    </target>
+    
+    <!-- Start the the application -->
+    <target name="shoot" depends="shoot_build">
+        <exec executable="${wtk.home}/bin/emulator">
+            <arg line="-classpath build/bin/ShootLite.jar -Xdescriptor:build/bin/ShootLite.jad"/>
+        </exec>
+    </target>        
+    
+    <target name="shoot2" depends="shoot_build">
+        <exec executable="${midp_home}/bin/midp">
+            <arg line="-classpath build/preverified examples.jsr180.Shootme"/>
+        </exec>
+    </target> 
+    
+    <!-- Start the the application in the debug mode
+         To connect to the MIDlet, open a shell and use the following command
+         jdb -connect com.sun.jdi.SocketAttach:hostname=129.6.50.176,port=5000
+         Change to your own IP address in this previous command and in the arg line of the exec target         
+    -->
+    <target name="shoot_debug" depends="shoot_build">
+        <exec executable="${wtk.home}/bin/emulator">
+            <arg line="-classpath ${wtk.home}/lib/nist-siplite.jar;build/bin/ShootLite.jar -Xdebug -Xrunjdwp:transport=dt_socket,address=129.6.50.176:5000,server=y -Xdescriptor:build/bin/ShootLite.jad"/>
+        </exec>
+    </target>
+</project>

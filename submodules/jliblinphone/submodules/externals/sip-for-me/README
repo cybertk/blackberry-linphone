@@ -1,0 +1,120 @@
+Hello!
+
+This is an implementation of JSR 180, the SIP API for JavaME. 
+It has not yet passed the TCK for JSR 180, but it has been 
+tested to work quite reliably on various mobile devices and
+against various SIP/IMS platforms so it should work for you too. 
+In case it doesn't or you feel it lacks something, please 
+open an issue in the bug tracker!
+
+Take a look at examples/ directory for some examples on how to use the stack.
+The stack is based on the JAIN-SIP implementation and has essentially been
+ported over to MIDP 2.0/CLDC. Please see the copyright note at the end.
+
+ArnauVP 
+http://www.genaker.net/
+
+
+*******************************************************************************
+                To build this distribution for J2ME:
+*******************************************************************************
+
+There are 3 ways: 
+a) Using ant, antenna and some WTK (build.xml provided)
+b) Using your IDE of choice (e.g. Netbeans w/mobility pack, Sun JavaME SDK, Eclipse + MTJ, etc.)
+c) using the makefile provided by NIST (untested for a long time)
+
+*************
+Antenna
+*************
+1. Install antenna, ant and some wireless toolkit (I use Sun's WTK 2.5.2.). 
+2. Point the %WTK_HOME% variable to the appropriate directory.
+3. Run 'ant' on the base directory of the project.
+
+*************
+IDE
+*************
+Simply create a JavaME project, import the source and create a package/JAR the usual way,
+or just add sip-for-me as a dependency for other projects. 
+
+
+**************************
+Make file (AT YOUR OWN RISK!)
+**************************
+1. Install the J2ME CLDC reference implementation from SUN.
+
+2. Install a the J2SE SDK (1.4.0).
+
+3. Install gnu make if you do not have it (get the cygnus toolkit for this if
+	you are using windows).
+
+4. Edit the build-config.j2me to set up the paths (in this directory). In particular
+    set DEBUG=0 to build a lean version and DEBUG=1 to get debug messages.
+
+5. To build the binaries:
+	make -f makefile all 
+
+	This will generate preverified class files in the directory
+	preverified.
+
+6 To build the documentation:
+	make -f makefile javadoc
+
+7. if you want to port the midlet on a real palm, you have to create
+   a .prc file (Use the PRC converter)
+NOTE: Because of a limitation of the Palm application memory, the midlet
+is not quite working on a real palm (but this may change so try it out).
+
+Acknowledgements
+-----------------
+
+Primary authors of this software were:
+
+M. Ranganathan <mranga@nist.gov>
+Jean Deruelle  <deruelle_jean@dev.java.net>
+Olivier Deruelle <deruelle_olivier@dev.java.net>
+Arnau Vazquez Palma <arnauvp@dev.java.net>
+
+Contributions were made by many people to NIST-SIP. Please see 
+
+http://jain-sip.dev.java.net/
+
+J2ME specific bugs reported by
+
+Deepa Rao
+Johann Diegremont
+Mario Martak
+
+
+This software is the product of the Internetworking Technologies group of
+the Advanced Networking Technologies Division of the National Institute 
+of Standards and Technology.
+
+Divison Chief: David Su
+
+Group Lead: Doug Montgomery
+
+
+
+Copyrights
+----------
+
+The software was developed by employees of the National Institute of
+Standards and Technology (NIST), an agency of the Federal Government.
+Pursuant to title 15 Untied States Code Section 105, works of NIST
+employees are not subject to copyright protection in the United States
+and are considered to be in the public domain.  As a result, a formal
+license is not needed to use the software.
+
+The NIST-SIP software is provided by NIST as a service and is expressly
+provided "AS IS."  NIST MAKES NO WARRANTY OF ANY KIND, EXPRESS, IMPLIED
+OR STATUTORY, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTY OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT
+AND DATA ACCURACY.  NIST does not warrant or make any representations
+regarding the use of the software or the results thereof, including but
+not limited to the correctness, accuracy, reliability or usefulness of
+the software.
+
+Permission to use this software is contingent upon your acceptance
+of the terms of this agreement and upon your providing appropriate
+acknowledgments of NIST's ownership of the software.

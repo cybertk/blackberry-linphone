@@ -1,0 +1,14 @@
+MIDlet-Jar-Size:  
+MIDlet-6: RefreshExample, , examples.jsr180.RefreshExample
+MIDlet-5: Shootme, , examples.shootist.Shootme
+MIDlet-4: Shootist, , examples.shootist.Shootist 
+MIDlet-3: ShootistJSR180, , examples.jsr180.Shootist 
+MIDlet-2: ShootmeJSR180, , examples.jsr180.Shootme 
+MIDlet-1: Messenger4Me, , examples.messaging.Messenger4Me
+MIDlet-Permissions: javax.microedition.io.Connector.http,javax.microedition.io.Connector.sip,javax.microedition.io.Connector.socket,javax.microedition.io.Connector.https,javax.microedition.io.Connector.datagram,javax.microedition.io.Connector.serversocket,javax.microedition.io.Connector.datagramreceiver,javax.microedition.io.Connector.comm
+MIDlet-Jar-URL: ShootLite.jar 
+MicroEdition-Configuration: CLDC-1.0 
+MIDlet-Version: 1.0 
+MIDlet-Name: ShootLite 
+MIDlet-Vendor: Administrator 
+MicroEdition-Profile: MIDP-1.0 

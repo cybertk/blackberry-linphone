@@ -1,0 +1,81 @@
+# configuration file for the build.
+
+ifeq (${OS},)
+	OS=$(OSTYPE)
+endif
+
+DEBUG=1
+
+#ROOT=.
+
+
+MAKE = make 
+
+ifeq (${OS},Windows_NT) 
+	#Where you installed  JDK
+	JDK_HOME=c:/j2sdk1.4.1/
+	#JDK_HOME=c:/jdk1.3.1/
+        JAR=$(JDK_HOME)/bin/jar
+	J2ME_CLDC_HOME=c:/j2me/j2me_cldc
+	CP=$(ROOT)/classes
+	#Where you installed the midp.
+        MIDP_HOME=c:/midp2.0fcs
+        MIDP=$(MIDP_HOME)/bin/midp
+#	RUNCLASSPATH = "$(ROOT)/preverified;$(J2ME_CLDC_HOME)/bin/common/api/classes;$(MIDP_HOME)/classes"
+	RUNCLASSPATH = "$(ROOT)/preverified;$(MIDP_HOME)/classes"
+	ifeq (${DEBUG},1)
+		JAVA=$(J2ME_CLDC_HOME)/bin/win32/debug/kvm_g  -heapsize 1M -classpath  $(RUNCLASSPATH) 
+#		JAVA=$(MIDP_HOME)/bin/midp  -domain untrusted -heapsize 1M -classpath  $(RUNCLASSPATH)
+	else 
+		JAVA=$(J2ME_CLDC_HOME)/bin/win32/debug/kvm  -heapsize 512K
+		#JAVA=c:/j2sdk1.4.1_01//bin/java
+	endif
+	BCP="$(ROOT)/classes;$(MIDP_HOME)/classes"
+	PREVERIFY=$(MIDP_HOME)/bin/preverify -classpath "$(ROOT)/classes;$(CP);$(MIDP_HOME)/classes" -d $(ROOT)/preverified
+else
+	JDK_HOME=/usr/local/j2sdk1.4.1
+        JAR=$(JDK_HOME)/bin/jar
+	J2ME_CLDC_HOME=/usr/local/j2me_cldc
+	CP=$(ROOT)/classes
+	ifeq (${DEBUG},1)
+		JAVA=$(J2ME_CLDC_HOME)/bin/linux/debug/kvm_g  -heapsize 1M  -classpath $(RUNCLASSPATH)
+	else
+		JAVA=$(J2ME_CLDC_HOME)/bin/linux/kvm  -heapsize  512K 
+	endif
+        MIDP_HOME=/usr/local/midp2.0fcs/
+        MIDP=$(MIDP_HOME)/bin/midp
+	RUNCLASSPATH = "$(ROOT)/preverified:$(ROOT)/preverified:$(MIDP_HOME)/classes"
+	PREVERIFY=$(J2ME_CLDC_HOME)/bin/linux/preverify -classpath "$(CP):$(MIDP_HOME)/classes" -d $(ROOT)/preverified
+	BCP="$(ROOT)/classes:$(MIDP_HOME)/classes"
+endif
+
+ifeq (${DEBUG},1)
+	JAVAC=$(JDK_HOME)/bin/javac -bootclasspath $(MIDP_HOME)/classes -classpath $(BCP) -sourcepath $(ROOT)/src -g -target 1.1 -d $(ROOT)/classes
+else
+	JAVAC=$(JDK_HOME)/bin/javac  -classpath $(BCP) -sourcepath $(ROOT)/src -target 1.1 -d $(ROOT)/classes
+endif
+
+JAVADOC=$(JDK_HOME)/bin/javadoc
+
+
+#BCP="$(J2ME_CLDC_HOME)/bin/common/api/classes;$(MIDP_HOME)/classes"
+
+emacsclean:
+	\rm -f *~
+	\rm -f .#*
+
+clean: emacsclean
+	\rm -f *.class
+
+%.class: %.java
+	$(JAVAC) $<
+	$(PREVERIFY) $(PACKAGE).$*
+
+
+kvmdebug:
+	 java -classpath $(J2ME_CLDC_HOME)/bin/common/tools/kdp/classes:$(RUNCLASSPATH) kdp.KVMDebugProxy -l 3000  -r localhost 7000 -p -classpath $(J2ME_CLDC_HOME)/bin/common/api/classes:$(ROOT)/ -v 9
+
+preverifyall:
+	#\rm -f $(ROOT)/preverify.classes
+	cd $(ROOT)/classes;find  * -name "*.class" -print | sed s/.class// | sed  s/\\//\./g > ../preverify.classes
+	$(shell for f in `cat $(ROOT)/preverify.classes`;do $(PREVERIFY) $$f;done)
